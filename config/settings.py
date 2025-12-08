@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
-import sys  # <--- 1. Додай імпорт sys (якщо немає)
+import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'subscriptions',
     'notifications',
     'schedule',
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -110,7 +111,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
-
+LOGIN_REDIRECT_URL = 'dashboard' # після входу - дашборд
+LOGOUT_REDIRECT_URL = 'login' # логін 
+#
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
