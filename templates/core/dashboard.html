@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<hgroup>
+    <h1>Вітаємо, {{ user.first_name|default:user.username }}!</h1>
+    <h2>Ваш статус: {% if has_active_sub %}✅ Активний{% else %}❌ Немає абонемента{% endif %}</h2>
+</hgroup>
+
+<div class="grid">
+    <article>
+        <header>🎫 Абонемент</header>
+        {% if has_active_sub %}
+            <p>Дійсний до: <strong>{{ sub_end_date }}</strong></p>
+            <progress value="{{ days_left }}" max="30"></progress>
+        {% else %}
+            <p>Час тренуватися!</p>
+            <a href="{% url 'subscription_list' %}" role="button">Купити абонемент</a>
+        {% endif %}
+    </article>
+
+    <article>
+        <header>🔔 Сповіщення {% if unread_count > 0 %}<mark>{{ unread_count }}</mark>{% endif %}</header>
+        <ul>
+            {% for note in notifications|slice:":3" %}
+                <li>{{ note.title }} <small>({{ note.created_at|date:"d.m" }})</small></li>
+            {% empty %}
+                <li>Нових повідомлень немає</li>
+            {% endfor %}
+        </ul>
+        <footer style="text-align: right;">
+            <a href="{% url 'notifications' %}">Всі повідомлення →</a>
+        </footer>
+    </article>
+</div>
+
+<article>
+    <header>⚡ Швидкі дії</header>
+    <div class="grid">
+        <a href="{% url 'schedule' %}" role="button" class="secondary">📅 Переглянути розклад</a>
+        <a href="#" role="button" class="contrast">💪 Моя програма</a>
+    </div>
+</article>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<article>
+    <header>
+        <strong>👤 Профіль користувача</strong>
+    </header>
+    <div class="grid">
+        <div>
+            <label>Ім'я</label>
+            <input type="text" value="{{ user.first_name }} {{ user.last_name }}" readonly>
+            
+            <label>Телефон</label>
+            <input type="text" value="{{ user.phone_number }}" readonly>
+            
+            <label>Email</label>
+            <input type="text" value="{{ user.email }}" readonly>
+        </div>
+        
+        <div>
+            <h4>📊 Ваша статистика</h4>
+            <ul>
+                <li>Відвідувань всього: <strong>14</strong></li>
+                <li>Останнє тренування: <strong>05.11.2023</strong></li>
+                <li>Вага: <strong>75 кг</strong> (похудання: -2кг)</li>
+            </ul>
+        </div>
+    </div>
+</article>
+{% endblock %}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark"> <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vortex App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        body > main { padding-top: 2rem; }
+        nav { border-bottom: 1px solid #333; padding: 0 1rem; }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><strong>VORTEX</strong></li>
+        </ul>
+        <ul>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'dashboard' %}">Головна</a></li>
+                <li><a href="{% url 'schedule' %}">Розклад</a></li>
+                <li><a href="{% url 'profile' %}" role="button" class="outline">Профіль</a></li>
+                <li>
+                    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="contrast outline" style="border:none;">Вийти</button>
+                    </form>
+                </li>
+            {% else %}
+                <li><a href="{% url 'login' %}" role="button">Увійти</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <main class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <article style="background-color: #333; border-color: green;">{{ message }}</article>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>

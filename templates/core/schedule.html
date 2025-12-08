@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<hgroup>
+    <h1>📅 Розклад тренувань</h1>
+    <h2>Найближчі заняття у залі</h2>
+</hgroup>
+
+<figure>
+    <table role="grid">
+        <thead>
+            <tr>
+                <th scope="col">Дата та Час</th>
+                <th scope="col">Тренування</th>
+                <th scope="col">Тренер</th>
+                <th scope="col">Вільних місць</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for session in sessions %}
+            <tr>
+                <td>
+                    <strong>{{ session.start_time|date:"d.m (D)" }}</strong><br>
+                    {{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}
+                </td>
+                <td>{{ session.title }}</td>
+                <td>{{ session.trainer.first_name }} {{ session.trainer.last_name }}</td>
+                <td>{{ session.capacity }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="text-align: center;">Поки що тренувань не заплановано.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</figure>
+{% endblock %}
