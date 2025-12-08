@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<article class="grid">
+    <div>
+        <hgroup>
+            <h1>Вхід у систему</h1>
+            <h2>Введіть дані, надані тренером</h2>
+        </hgroup>
+        <form method="post">
+            {% csrf_token %}
+            
+            <label for="id_username">Логін</label>
+            {{ form.username }}
+            
+            <label for="id_password">Пароль</label>
+            {{ form.password }}
+            
+            <button type="submit" class="primary">Увійти</button>
+        </form>
+        <footer>
+            <small>Забули пароль? Зверніться до вашого тренера.</small>
+        </footer>
+    </div>
+    <div style="background-image: url('https://source.unsplash.com/random/800x600/?gym'); background-size: cover; border-radius: 8px;"></div>
+</article>
+{% endblock %}
