@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<hgroup>
+    <h1>🎫 Виберіть абонемент</h1>
+    <h2>Інвестуйте у своє здоров'я</h2>
+</hgroup>
+
+<div class="grid">
+    {% for sub in sub_types %}
+    <article>
+        <header><strong>{{ sub.name }}</strong></header>
+        <h3>{{ sub.price }} грн</h3>
+        <p>Тривалість: {{ sub.duration_days }} днів</p>
+        <p><small>{{ sub.description }}</small></p>
+        <footer>
+            <a href="#" role="button" class="contrast">Придбати</a>
+        </footer>
+    </article>
+    {% empty %}
+    <p>На жаль, абонементи поки не створені тренером.</p>
+    {% endfor %}
+</div>
+{% endblock %}
