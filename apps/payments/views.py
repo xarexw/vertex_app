@@ -6,7 +6,8 @@ from datetime import timedelta
 
 import uuid
 
-from subscriptions.models import SubscriptionType, UserSubscription, Notification
+from subscriptions.models import SubscriptionType, UserSubscription
+from notifications.models import Notification
 from .models import Order, Transaction
 
 @login_required
