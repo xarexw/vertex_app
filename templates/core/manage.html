@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<article>
+    <header>
+        <strong>🔴 Live Mode: {{ session.title }}</strong>
+        <span style="float: right;">{{ session.start_time|date:"H:i" }}</span>
+    </header>
+
+    <div class="grid">
+        <form hx-post="{% url 'add_record' session.id %}" hx-target="#records-body" hx-swap="innerHTML">
+            {% csrf_token %}
+            
+            <label>Атлет
+                <select name="client_id" required>
+                    <option value="" disabled selected>Оберіть зі списку...</option>
+                    {% for client in clients %}
+                    <option value="{{ client.id }}">{{ client.first_name }} {{ client.last_name }} ({{ client.username }})</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <div class="grid">
+                <input type="text" name="exercise" placeholder="Вправа (нап. Жим лежачи)" required>
+                <input type="text" name="result" placeholder="Результат (нап. 100кг х 8)" required>
+            </div>
+
+            <button type="submit" class="contrast">💾 Записати</button>
+        </form>
+    </div>
+
+    <hr>
+
+    <table role="grid">
+        <thead>
+            <tr>
+                <th>Час</th>
+                <th>Атлет</th>
+                <th>Вправа</th>
+                <th>Результат</th>
+            </tr>
+        </thead>
+        <tbody id="records-body">
+            {% include 'core/partials/records_table.html' %}
+        </tbody>
+    </table>
+
+    <br><br>
+    <div style="text-align: right;">
+        <a href="{% url 'session_summary' session.id %}" role="button" style="background-color: #ef4444; border-color: #ef4444;">
+            🏁 Завершити тренування
+        </a>
+    </div>
+
+</article>
+{% endblock %}

@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html lang="uk" data-theme="dark"> <head>
+<html lang="uk" data-theme="dark"> 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vortex App</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script> 
+
     <style>
         body > main { padding-top: 2rem; }
         nav { border-bottom: 1px solid #333; padding: 0 1rem; }
     </style>
 </head>
-<body>
+
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
     <nav>
         <ul>
             <li><strong>VORTEX</strong></li>

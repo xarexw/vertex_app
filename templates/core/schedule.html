@@ -14,22 +14,43 @@
                 <th scope="col">Тренування</th>
                 <th scope="col">Тренер</th>
                 <th scope="col">Вільних місць</th>
+                {% if user.is_staff %}
+                    <th scope="col">Дії (Admin)</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for session in sessions %}
             <tr>
                 <td>
-                    <strong>{{ session.start_time|date:"d.m (D)" }}</strong><br>
-                    {{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}
+                    <strong>{{ session.start_time|date:"d.m" }}</strong>
+                    <small>{{ session.start_time|time:"H:i" }}</small>
                 </td>
                 <td>{{ session.title }}</td>
-                <td>{{ session.trainer.first_name }} {{ session.trainer.last_name }}</td>
-                <td>{{ session.capacity }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4" style="text-align: center;">Поки що тренувань не заплановано.</td>
+                <td>
+                    {% if session.trainer %}
+                        {{ session.trainer.first_name }}
+                    {% else %}
+                        <em style="color: grey;">Тимчасова заміна</em>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if session.capacity == 0 %}
+                        <strong style="color: #ef4444;">SOLD OUT</strong>
+                    {% elif session.capacity < 5 %}
+                        <span style="color: #f59e0b;">🔥 {{ session.capacity }} (мало)</span>
+                    {% else %}
+                        <span style="color: #10b981;">{{ session.capacity }} місць</span>
+                    {% endif %}
+                </td>
+                
+                {% if user.is_staff %}
+                <td>
+                    <a href="{% url 'session_manage' session.id %}" role="button" class="outline contrast" style="padding: 5px 10px; font-size: 0.8em;">
+                        🔴 Live
+                    </a>
+                </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

@@ -8,3 +8,13 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return f"{self.username} ({self.first_name} {self.last_name})"
+
+class ClientStat(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='stats')
+    weight = models.FloatField(verbose_name="Вага (кг)", default=0.0)
+    height = models.FloatField(verbose_name="Зріст (см)", default=0.0)
+    # можна додати об'єми, жир, тд
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Stat for {self.user.username}"
