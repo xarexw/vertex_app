@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>📅 Розклад тренувань</h1>
+<figure>
+    <table role="grid">
+        <thead>
+            <tr>
+                <th scope="col">Час</th>
+                <th scope="col">Понеділок</th>
+                <th scope="col">Середа</th>
+                <th scope="col">П'ятниця</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">18:00</th>
+                <td>Інтенсив (Кардіо/Кросфіт)</td>
+                <td>Силове (Спина)</td>
+            </tr>
+            <tr>
+                <th scope="row">19:30</th>
+                <td>Інтенсив (Ноги)</td>
+                <td>Силове (Ноги)</td>
+                <td>Вільна вага</td>
+            </tr>
+        </tbody>
+    </table>
+</figure>
+{% endblock %}
