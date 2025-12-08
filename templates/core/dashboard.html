@@ -2,83 +2,135 @@
 
 {% block content %}
 
-<hgroup>
-    <h1>Вітаємо, {{ user.first_name|default:user.username }}!</h1>
-    {% if user.is_staff %}
-        <h2>🛠️ Панель Тренера</h2>
-    {% else %}
-        <h2>Ваш статус: {% if has_active_sub %}✅ Активний{% else %}❌ Немає абонемента{% endif %}</h2>
-    {% endif %}
+<hgroup style="margin-bottom: 1rem;">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0;">Вітаємо, {{ user.first_name|default:user.username }}!</h1>
+    <small style="color: #94a3b8;">
+        {% if user.is_staff %}🛠️ Панель Тренера{% else %}Ваш персональний кабінет{% endif %}
+    </small>
 </hgroup>
 
+
 {% if user.is_staff %}
-
-<div class="grid">
-    <article>
-        <header>⚡ Управління</header>
-        <div class="grid">
-            <a href="{% url 'schedule' %}" role="button">📅 Весь Розклад</a>
-            <a href="/admin/" role="button" class="secondary">⚙️ Адмінка</a>
+<div class="dashboard-layout" style="grid-template-columns: repeat(3, 1fr);">
+    
+    <div class="dash-card">
+        <div class="dash-header">⚡ Пульт Тренера</div>
+        <div class="grid" style="gap: 0.75rem; display: flex; flex-direction: column; height: 100%; justify-content: center;">
+            <a href="/admin/" role="button" class="primary" style="width: 100%; margin-bottom: 0;">
+                ⚙️ Адмін-панель
+            </a>
+            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0;">
+                <a href="{% url 'schedule' %}" role="button" class="secondary outline" style="font-size: 0.8em; padding: 0.5rem;">📅 Розклад</a>
+                <a href="{% url 'profile' %}" role="button" class="contrast outline" style="font-size: 0.8em; padding: 0.5rem;">👤 Профіль</a>
+            </div>
         </div>
-    </article>
+    </div>
 
-    <article>
-        <header>📋 Мої заняття (Найближчі)</header>
+    <div class="dash-card" style="position: relative; overflow: hidden; border-color: var(--primary);">
+        <div class="dash-header" style="color: var(--primary);">🚀 Наступне тренування</div>
+        
         {% if trainer_sessions %}
-            <ul>
-            {% for session in trainer_sessions %}
-                <li style="margin-bottom: 10px;">
-                    <strong>{{ session.start_time|date:"d.m H:i" }}</strong> — {{ session.title }}<br>
-                    <a href="{% url 'session_manage' session.id %}" style="text-decoration: none;">
-                        🔴 Перейти в Live Mode →
-                    </a>
-                </li>
-            {% endfor %}
-            </ul>
+            {% with next_session=trainer_sessions.0 %}
+            <div style="text-align: center; padding: 0.5rem 0; flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
+                <div class="metric-big" style="font-size: 2.2rem; color: #fff;">{{ next_session.start_time|date:"H:i" }}</div>
+                <div style="font-size: 1.1rem; color: var(--primary); font-weight: bold;">{{ next_session.title }}</div>
+                <small style="color: #94a3b8; margin-top: 0.5rem;">{{ next_session.start_time|date:"d.m.Y" }}</small>
+            </div>
+            
+            <div class="dash-footer">
+                <a href="{% url 'session_manage' next_session.id %}" role="button" style="width: 100%; background-color: #ef4444; border-color: #ef4444; font-weight: bold; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);">
+                    🔴 ЗАПУСТИТИ LIVE
+                </a>
+            </div>
+            {% endwith %}
         {% else %}
-            <p>У вас немає запланованих тренувань на найближчий час.</p>
+            <div style="text-align: center; padding: 2rem 0; color: #94a3b8; display: flex; align-items: center; justify-content: center; height: 100%;">
+                <div>🏖️<br>Відпочинок</div>
+            </div>
         {% endif %}
-    </article>
+    </div>
+
+    <div class="dash-card">
+        <div class="dash-header">📋 Далі у розкладі</div>
+        <ul class="dash-list">
+            {% if trainer_sessions and trainer_sessions|length > 1 %}
+                {% for session in trainer_sessions|slice:"1:" %} <li style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+                        <span style="color: #fff;">{{ session.start_time|date:"H:i" }}</span>
+                        <span style="color: #94a3b8;">{{ session.title }}</span>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li style="color: #94a3b8; text-align: center; padding: 1rem 0; list-style: none;">
+                    Більше занять на сьогодні немає.
+                </li>
+            {% endif %}
+        </ul>
+        <div class="dash-footer" style="text-align: right;">
+            <a href="{% url 'schedule' %}" style="font-size: 0.8rem; text-decoration: none; color: var(--primary);">Весь графік →</a>
+        </div>
+    </div>
+
 </div>
 
+
 {% else %}
+<div class="dashboard-layout" style="grid-template-columns: repeat(3, 1fr);">
 
-<div class="grid">
-    <article>
-        <header>🎫 Мій Абонемент</header>
+    <div class="dash-card" style="position: relative; overflow: hidden;">
+        <div class="dash-header">🎫 Мій Абонемент</div>
+        
         {% if has_active_sub %}
-            <h3>Активний до {{ sub_end_date }}</h3>
-            <p>Залишилось днів: {{ days_left }}</p>
-            <progress value="{{ days_left }}" max="30"></progress>
+            <div style="position: absolute; top: 1rem; right: 1rem; color: #10b981; font-size: 0.85rem;">
+                ✅ Активний
+            </div>
+            
+            <div style="text-align: center; padding: 1rem 0;">
+                <div class="metric-big">{{ days_left }}</div>
+                <div style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 1rem;">днів залишилось</div>
+                <progress class="slim" value="{{ days_left }}" max="30"></progress>
+                <small>До: {{ sub_end_date|date:"d E Y" }}</small>
+            </div>
         {% else %}
-            <p>У вас немає активних тренувань.</p>
-            <a href="{% url 'subscription_list' %}" role="button">Купити абонемент</a>
+            <div style="text-align: center; padding: 1.5rem 0;">
+                 <div style="font-size: 2rem; margin-bottom: 0.5rem;">❌</div>
+                 <p>У вас немає активного абонемента.</p>
+            </div>
+            <div class="dash-footer">
+                <a href="{% url 'subscription_list' %}" role="button" style="width: 100%;">💎 Купити абонемент</a>
+            </div>
         {% endif %}
-    </article>
+    </div>
 
-    <article>
-        <header>🔔 Сповіщення</header>
-        <ul>
+
+    <div class="dash-card">
+        <div class="dash-header">🔔 Останні події</div>
+        <ul class="dash-list">
             {% for note in notifications %}
                 <li>{{ note.title }}</li>
             {% empty %}
-                <li>Нових повідомлень немає</li>
+                <li style="color: #94a3b8; text-align: center; padding: 1rem 0;">Нових сповіщень немає</li>
             {% endfor %}
         </ul>
-        {% if notifications %}
-        <footer style="text-align: right;">
-            <a href="{% url 'notifications' %}">Всі повідомлення →</a>
-        </footer>
-        {% endif %}
-    </article>
-</div>
-
-<article>
-    <header>⚡ Швидкі дії</header>
-    <div class="grid">
-        <a href="{% url 'schedule' %}" role="button" class="secondary">📅 Переглянути розклад</a>
-        <a href="{% url 'profile' %}" role="button" class="contrast">👤 Мій Профіль</a>
+        
+        <div class="dash-footer" style="text-align: right;">
+            <a href="{% url 'notifications' %}" style="font-size: 0.85rem; text-decoration: none;">Всі сповіщення →</a>
+        </div>
     </div>
-</article>
 
-{% endif %} {% endblock %}
+
+    <div class="dash-card">
+        <div class="dash-header">⚡ Навігація</div>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; height: 100%;">
+            <a href="{% url 'schedule' %}" role="button" class="secondary outline" style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                📅 Розклад залу
+            </a>
+            <a href="{% url 'profile' %}" role="button" class="contrast outline" style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                👤 Мій Профіль і Статистика
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endif %}
+
+{% endblock %}
