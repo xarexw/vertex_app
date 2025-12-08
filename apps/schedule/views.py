@@ -33,6 +33,7 @@ def add_record(request, session_id):
         # отримання даних з форми
         client_id = request.POST.get('client_id')
         exercise = request.POST.get('exercise')
+        rpe = request.POST.get('rpe')
         result = request.POST.get('result')
         
         client = get_object_or_404(User, id=client_id)
@@ -42,6 +43,7 @@ def add_record(request, session_id):
             session=session,
             client=client,
             exercise_name=exercise,
+            rpe=rpe if rpe else None,
             result_value=result
         )
         
