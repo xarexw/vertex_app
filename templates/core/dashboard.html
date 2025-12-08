@@ -1,35 +1,75 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <hgroup>
     <h1>Вітаємо, {{ user.first_name|default:user.username }}!</h1>
-    <h2>Ваш статус: {% if has_active_sub %}✅ Активний{% else %}❌ Немає абонемента{% endif %}</h2>
+    {% if user.is_staff %}
+        <h2>🛠️ Панель Тренера</h2>
+    {% else %}
+        <h2>Ваш статус: {% if has_active_sub %}✅ Активний{% else %}❌ Немає абонемента{% endif %}</h2>
+    {% endif %}
 </hgroup>
+
+{% if user.is_staff %}
 
 <div class="grid">
     <article>
-        <header>🎫 Абонемент</header>
+        <header>⚡ Управління</header>
+        <div class="grid">
+            <a href="{% url 'schedule' %}" role="button">📅 Весь Розклад</a>
+            <a href="/admin/" role="button" class="secondary">⚙️ Адмінка</a>
+        </div>
+    </article>
+
+    <article>
+        <header>📋 Мої заняття (Найближчі)</header>
+        {% if trainer_sessions %}
+            <ul>
+            {% for session in trainer_sessions %}
+                <li style="margin-bottom: 10px;">
+                    <strong>{{ session.start_time|date:"d.m H:i" }}</strong> — {{ session.title }}<br>
+                    <a href="{% url 'session_manage' session.id %}" style="text-decoration: none;">
+                        🔴 Перейти в Live Mode →
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>У вас немає запланованих тренувань на найближчий час.</p>
+        {% endif %}
+    </article>
+</div>
+
+{% else %}
+
+<div class="grid">
+    <article>
+        <header>🎫 Мій Абонемент</header>
         {% if has_active_sub %}
-            <p>Дійсний до: <strong>{{ sub_end_date }}</strong></p>
+            <h3>Активний до {{ sub_end_date }}</h3>
+            <p>Залишилось днів: {{ days_left }}</p>
             <progress value="{{ days_left }}" max="30"></progress>
         {% else %}
-            <p>Час тренуватися!</p>
+            <p>У вас немає активних тренувань.</p>
             <a href="{% url 'subscription_list' %}" role="button">Купити абонемент</a>
         {% endif %}
     </article>
 
     <article>
-        <header>🔔 Сповіщення {% if unread_count > 0 %}<mark>{{ unread_count }}</mark>{% endif %}</header>
+        <header>🔔 Сповіщення</header>
         <ul>
-            {% for note in notifications|slice:":3" %}
-                <li>{{ note.title }} <small>({{ note.created_at|date:"d.m" }})</small></li>
+            {% for note in notifications %}
+                <li>{{ note.title }}</li>
             {% empty %}
                 <li>Нових повідомлень немає</li>
             {% endfor %}
         </ul>
+        {% if notifications %}
         <footer style="text-align: right;">
             <a href="{% url 'notifications' %}">Всі повідомлення →</a>
         </footer>
+        {% endif %}
     </article>
 </div>
 
@@ -37,7 +77,8 @@
     <header>⚡ Швидкі дії</header>
     <div class="grid">
         <a href="{% url 'schedule' %}" role="button" class="secondary">📅 Переглянути розклад</a>
-        <a href="#" role="button" class="contrast">💪 Моя програма</a>
+        <a href="{% url 'profile' %}" role="button" class="contrast">👤 Мій Профіль</a>
     </div>
 </article>
-{% endblock %}
+
+{% endif %} {% endblock %}
