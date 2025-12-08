@@ -20,9 +20,23 @@
         <div>
             <h4>📊 Ваша статистика</h4>
             <ul>
-                <li>Відвідувань всього: <strong>14</strong></li>
-                <li>Останнє тренування: <strong>05.11.2023</strong></li>
-                <li>Вага: <strong>75 кг</strong> (похудання: -2кг)</li>
+                <li>Вага: <strong>{{ stat.weight }} кг</strong></li>
+                <li>Зріст: <strong>{{ stat.height }} см</strong></li>
+                <li>Дата оновлення: <small>{{ stat.updated_at|date:"d.m.Y" }}</small></li>
+            </ul>
+
+            <hr>
+
+            <h5>🏆 Останні досягнення</h5>
+            <ul>
+                {% for rec in recent_records %}
+                <li>
+                    <small>{{ rec.created_at|date:"d.m" }}</small> 
+                    {{ rec.exercise_name }}: <strong>{{ rec.result_value }}</strong>
+                </li>
+                {% empty %}
+                <li>Ще немає записів тренувань.</li>
+                {% endfor %}
             </ul>
         </div>
     </div>

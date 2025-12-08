@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<article>
+    <hgroup>
+        <h1>🏁 Тренування завершено!</h1>
+        <h2>{{ session.title }} ({{ session.start_time|date:"d.m.Y" }})</h2>
+    </hgroup>
+
+    <div class="grid">
+        <div>
+            <strong>Тренер:</strong> {{ session.trainer.first_name }} {{ session.trainer.last_name }}
+        </div>
+        <div>
+            <strong>Всього записів:</strong> {{ records.count }}
+        </div>
+    </div>
+
+    <hr>
+
+    <h3>📋 Підсумковий протокол</h3>
+    
+    <figure>
+        <table role="grid">
+            <thead>
+                <tr>
+                    <th>Клієнт</th>
+                    <th>Вправа</th>
+                    <th>Результат</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rec in records %}
+                <tr>
+                    <td>
+                        <strong>{{ rec.client.first_name }} {{ rec.client.last_name }}</strong>
+                        <br><small>@{{ rec.client.username }}</small>
+                    </td>
+                    <td>{{ rec.exercise_name }}</td>
+                    <td><mark>{{ rec.result_value }}</mark></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align: center;">Результатів не зафіксовано.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </figure>
+
+    <footer>
+        <div class="grid">
+            <a href="{% url 'schedule' %}" role="button" class="secondary">📅 До розкладу</a>
+            <a href="{% url 'dashboard' %}" role="button" class="contrast">🏠 На головну</a>
+        </div>
+    </footer>
+</article>
+{% endblock %}

@@ -14,6 +14,9 @@
                 <th scope="col">Тренування</th>
                 <th scope="col">Тренер</th>
                 <th scope="col">Вільних місць</th>
+                {% if user.is_staff %}
+                    <th scope="col">Дії (Admin)</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -40,6 +43,14 @@
                         <span style="color: #10b981;">{{ session.capacity }} місць</span>
                     {% endif %}
                 </td>
+                
+                {% if user.is_staff %}
+                <td>
+                    <a href="{% url 'session_manage' session.id %}" role="button" class="outline contrast" style="padding: 5px 10px; font-size: 0.8em;">
+                        🔴 Live
+                    </a>
+                </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>
