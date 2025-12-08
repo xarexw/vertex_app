@@ -80,19 +80,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-DATABASES = {
-    'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'gym_db',         
         'USER': 'gym_user',       
         'PASSWORD': 'gym_password', 
         'HOST': '127.0.0.1',      # локалхост
-        'PORT': '5432',           # порт у yaml
+        'PORT': '5433',           # порт у yaml
     }
 }
 
