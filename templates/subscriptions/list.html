@@ -14,7 +14,7 @@
         <p>Тривалість: {{ sub.duration_days }} днів</p>
         <p><small>{{ sub.description }}</small></p>
         <footer>
-            <a href="#" role="button" class="contrast">Придбати</a>
+            <a href="{% url 'create_order' sub.id %}" role="button" class="contrast">Придбати</a>
         </footer>
     </article>
     {% empty %}
