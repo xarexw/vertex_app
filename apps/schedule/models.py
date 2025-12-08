@@ -10,3 +10,14 @@ class TrainingSession(models.Model):
 
     def __str__(self):
         return f"{self.title} at {self.start_time}"
+
+class Record(models.Model):
+    session = models.ForeignKey(TrainingSession, on_delete=models.CASCADE, related_name='records')
+    client = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='training_records')
+    exercise_name = models.CharField(max_length=100, verbose_name="Вправа")
+    result_value = models.CharField(max_length=100, verbose_name="Результат (кг/рази)")
+    note = models.TextField(blank=True, verbose_name="Примітка тренера")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.client.username} - {self.exercise_name}: {self.result_value}"
