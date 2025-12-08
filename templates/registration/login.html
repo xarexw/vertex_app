@@ -7,21 +7,31 @@
             <h1>Вхід у систему</h1>
             <h2>Введіть дані, надані тренером</h2>
         </hgroup>
+
         <form method="post">
             {% csrf_token %}
             
-            <label for="id_username">Логін</label>
+            {% if form.errors %}
+                <p style="color: red;">Невірний логін або пароль.</p>
+            {% endif %}
+
+            <label for="id_username">Логін (Username)</label>
             {{ form.username }}
-            
+
             <label for="id_password">Пароль</label>
             {{ form.password }}
-            
+
             <button type="submit" class="primary">Увійти</button>
+            
+            <input type="hidden" name="next" value="{{ next }}">
         </form>
+
         <footer>
-            <small>Забули пароль? Зверніться до вашого тренера.</small>
+            <small>Ще немає акаунта? <a href="{% url 'register' %}">Зареєструватися</a></small>
         </footer>
     </div>
-    <div style="background-image: url('https://source.unsplash.com/random/800x600/?gym'); background-size: cover; border-radius: 8px;"></div>
+
+    <div style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80'); background-size: cover; background-position: center; border-radius: 8px; min-height: 300px;">
+    </div>
 </article>
 {% endblock %}
