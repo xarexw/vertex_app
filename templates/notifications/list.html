@@ -9,13 +9,20 @@
 <div class="grid">
     <div style="grid-column: span 3;">
         {% for note in notifications %}
-        <article>
+        <article id="note-{{ note.id }}"> 
             <header>
                 <strong>{{ note.title }}</strong>
-                <small style="float: right;">{{ note.created_at|date:"d.m.Y H:i" }}</small>
+                    <button 
+                        class="outline contrast" 
+                        style="float: right; padding: 2px 10px; font-size: 0.8em;"
+                        hx-delete="{% url 'delete_notification' note.id %}"
+                        hx-target="#note-{{ note.id }}"
+                        hx-swap="outerHTML">
+                        Видалити ✕
+                    </button>
             </header>
             <p>{{ note.message }}</p>
-        </article>
+        </article>  
         {% empty %}
         <p>У вас немає нових сповіщень.</p>
         {% endfor %}

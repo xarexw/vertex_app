@@ -21,13 +21,17 @@
     <div class="grid">
         <form action="{% url 'confirm_payment' order.id %}" method="post">
             {% csrf_token %}
-            <button type="submit" style="background-color: green; border-color: green;">
+            <button type="submit" style="background-color: #10b981; border-color: #10b981;">
                 ✅ Оплатити успішно
             </button>
         </form>
 
-        <a href="{% url 'dashboard' %}" role="button" class="secondary" style="background-color: grey;">
-            ❌ Відхилити
+        <a href="{% url 'subscription_list' %}" role="button" class="secondary outline">
+            ⬅️ Змінити тариф
+        </a>
+        
+        <a href="{% url 'dashboard' %}" role="button" class="contrast outline" style="border: none;">
+            Скасувати
         </a>
     </div>
 </article>
