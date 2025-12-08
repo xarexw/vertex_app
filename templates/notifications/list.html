@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<hgroup>
+    <h1>🔔 Ваші сповіщення</h1>
+    <h2>Історія подій</h2>
+</hgroup>
+
+<div class="grid">
+    <div style="grid-column: span 3;">
+        {% for note in notifications %}
+        <article>
+            <header>
+                <strong>{{ note.title }}</strong>
+                <small style="float: right;">{{ note.created_at|date:"d.m.Y H:i" }}</small>
+            </header>
+            <p>{{ note.message }}</p>
+        </article>
+        {% empty %}
+        <p>У вас немає нових сповіщень.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
