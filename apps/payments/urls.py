@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import create_order, mock_payment
+from .views import create_order, mock_payment, confirm_payment
 
 urlpatterns = [
     # cтворення замовлення (приймає ID підписки)
@@ -7,4 +7,5 @@ urlpatterns = [
     
     # cторінка банку (приймає ID замовлення)
     path('gateway/<int:order_id>/', mock_payment, name='mock_payment'),
+    path('confirm/<int:order_id>/', confirm_payment, name='confirm_payment'),
 ]

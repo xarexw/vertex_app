@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<article style="max-width: 600px; margin: 0 auto; border: 2px solid #007bff;">
+    <header style="background-color: #007bff; color: white;">
+        <strong>🏦 Secure Payment Gateway (Demo)</strong>
+    </header>
+    
+    <div class="grid">
+        <div>
+            <h3>До сплати: {{ order.amount }} грн</h3>
+            <p>Призначення: <strong>{{ order.subscription_type.name }}</strong></p>
+            <p>Замовлення №: {{ order.id }}</p>
+        </div>
+    </div>
+
+    <hr>
+    
+    <p>Виберіть результат операції (імітація):</p>
+    
+    <div class="grid">
+        <form action="{% url 'confirm_payment' order.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" style="background-color: green; border-color: green;">
+                ✅ Оплатити успішно
+            </button>
+        </form>
+
+        <a href="{% url 'dashboard' %}" role="button" class="secondary" style="background-color: grey;">
+            ❌ Відхилити
+        </a>
+    </div>
+</article>
+{% endblock %}
