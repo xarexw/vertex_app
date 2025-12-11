@@ -1,17 +1,42 @@
-# Ігноруємо віртуальне оточення
+#віртуальне оточення
 .venv
 venv
 env
 
-# Ігноруємо Git
+#git
 .git
 .gitignore
 
-# Ігноруємо кеш і скомпільовані файли
+#кеш/скомпільовані файли
 __pycache__
 *.pyc
 *.pyo
 *.pyd
 
-# Ігноруємо локальні змінні оточення (в контейнері будуть свої)
+#секрети
 .env
+.env.*
+*.vault_pass
+*.tfstate
+*.pem
+*.key
+*.pub
+
+terraform/
+ansible/
+docker-compose.yml
+README.md
+
+media/
+staticfiles/
+db.sqlite3
+
+*.png
+*.jpg
+docs/
+
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store

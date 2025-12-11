@@ -1,49 +1,54 @@
-# Python / Bytecode
+#python/bytes
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual Environment
+#venv
 .venv/
 venv/
 env/
 
-# Environment Variables
+#environment Variables
 .env
 .env.*
 
-# Django
+#django
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-# Static & Media
-# папка збору статики для проду (не вихідні коди)
+#static/media
+#папка збору статики для проду (не вихідні коди)
 staticfiles/
-# завантажені юзером файли (картинки, документи)
+#завантажені юзером файли (картинки, документи)
 media/
 
-# IDE & Editors
+#ide
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# OS Specific
+#os
 .DS_Store
 Thumbs.db
 
-# Docker
-# якщо раптом дані в локал директорію, а не volume
+#docker
+#якщо дані в локал директорію, а не volume
 pg_data/
 
-#Terraform
+#terraform
 .terraform/
 *.tfstate
 *.tfstate.backup
 *.pem
+*.tfvars
 
-# --- Ansible ---
+#ansible
 *.retry
 ansible/vertex-key.pem
+*.vault_pass
+*.key
+*.pub
+ansible/inventory.ini
