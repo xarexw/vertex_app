@@ -1,44 +1,142 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<article>
-    <header>
-        <strong>👤 Профіль користувача</strong>
-    </header>
-    <div class="grid">
-        <div>
-            <label>Ім'я</label>
-            <input type="text" value="{{ user.first_name }} {{ user.last_name }}" readonly>
+
+<hgroup style="margin-bottom: 1rem;">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0;">Мій Профіль</h1>
+    <small style="color: #94a3b8;">Персональна інформація та досягнення</small>
+</hgroup>
+
+<div class="dashboard-layout" style="grid-template-columns: 1fr 1fr 1fr;">
+
+    <div class="dash-card" style="text-align: center;">
+        <div style="padding: 1rem 0;">
+            <div class="profile-avatar">
+                {{ user.username|make_list|first|upper }}
+            </div>
+            <h2 style="margin-bottom: 0.25rem; font-size: 1.2rem;">{{ user.first_name }} {{ user.last_name }}</h2>
+            <small style="color: var(--primary);">@{{ user.username }}</small>
             
-            <label>Телефон</label>
-            <input type="text" value="{{ user.phone_number }}" readonly>
-            
-            <label>Email</label>
-            <input type="text" value="{{ user.email }}" readonly>
+            <div style="margin-top: 0.5rem;">
+                {% if user.is_staff %}
+                    <span style="background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;">ТРЕНЕР</span>
+                {% else %}
+                    <span style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;">КЛІЄНТ</span>
+                {% endif %}
+            </div>
         </div>
-        
-        <div>
-            <h4>📊 Ваша статистика</h4>
-            <ul>
-                <li>Вага: <strong>{{ stat.weight }} кг</strong></li>
-                <li>Зріст: <strong>{{ stat.height }} см</strong></li>
-                <li>Дата оновлення: <small>{{ stat.updated_at|date:"d.m.Y" }}</small></li>
-            </ul>
 
-            <hr>
+        <div style="text-align: left; margin-top: 0.5rem; margin-bottom: 1rem;">
+            <div class="info-row">
+                <span class="info-label">Email</span>
+                <span class="info-value">{{ user.email }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Телефон</span>
+                <span class="info-value">{{ user.phone_number|default:"—" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Реєстрація</span>
+                <span class="info-value">{{ user.date_joined|date:"d.m.Y" }}</span>
+            </div>
+        </div>
 
-            <h5>🏆 Останні досягнення</h5>
-            <ul>
-                {% for rec in recent_records %}
-                <li>
-                    <small>{{ rec.created_at|date:"d.m" }}</small> 
-                    {{ rec.exercise_name }}: <strong>{{ rec.result_value }}</strong>
-                </li>
-                {% empty %}
-                <li>Ще немає записів тренувань.</li>
-                {% endfor %}
-            </ul>
+        <div class="dash-footer">
+            <form action="{% url 'logout' %}" method="post" style="width: 100%; margin-bottom: 0;">
+                {% csrf_token %}
+                <button type="submit" class="secondary outline" style="width: 100%; font-size: 0.9rem;">
+                    🚪 Вийти
+                </button>
+            </form>
         </div>
     </div>
-</article>
+
+    {% if user.is_staff %}
+    
+    <div class="dash-card">
+        <div class="dash-header">📝 Про себе</div>
+        <div style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.6; white-space: pre-line;">
+            {{ user.bio|default:"Інформація про досвід ще не додана." }}
+        </div>
+
+        {% comment %} <div class="dash-footer">
+            <a href="/admin/users/customuser/{{ user.id }}/change/" target="_blank" role="button" class="primary outline" style="width: 100%; font-size: 0.9rem;">
+                ✏️ Редагувати дані
+            </a>
+        </div> {% endcomment %}
+    </div>
+
+    <div class="dash-card">
+        <div class="dash-header">📜 Сертифікати</div>
+        {% if certificates %}
+            <ul class="dash-list">
+            {% for cert in certificates %}
+                <li>
+                    <strong style="color: #fff; display: block;">{{ cert.title }}</strong>
+                    <small style="color: #94a3b8;">{{ cert.issued_by }} • {{ cert.date_issued|date:"Y" }}</small>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <div style="text-align: center; color: #94a3b8; padding: 2rem 0;">
+                Сертифікати ще не додані.
+            </div>
+        {% endif %}
+        <div class="dash-footer"></div>
+    </div>
+
+    {% else %}
+
+    <div class="dash-card">
+        <div class="dash-header">📊 Фізичний стан</div>
+        
+        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="stat-box">
+                <div class="stat-value">{{ stat.weight }}</div>
+                <div class="stat-label">Вага (кг)</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">{{ stat.height }}</div>
+                <div class="stat-label">Зріст (см)</div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 1rem;">
+            <small style="color: #94a3b8;">Останнє оновлення: {{ stat.updated_at|date:"d.m.Y" }}</small>
+        </div>
+        <div class="dash-footer"></div>
+    </div>
+
+    <div class="dash-card">
+        <div class="dash-header">🏆 Останні досягнення</div>
+        {% if recent_records %}
+            <ul class="dash-list">
+            {% for rec in recent_records %}
+                <li style="display: flex; justify-content: space-between;">
+                    <div>
+                        <span style="display: block; color: #fff;">{{ rec.exercise_name }}</span>
+                        <small style="color: #94a3b8;">{{ rec.created_at|date:"d.m" }}</small>
+                    </div>
+                    <div style="text-align: right;">
+                        <strong style="color: var(--primary);">{{ rec.result_value }}</strong>
+                        {% if rec.rpe %}
+                        <br><small style="font-size: 0.7em; color: #f59e0b;">RPE {{ rec.rpe }}</small>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <div style="text-align: center; color: #94a3b8; padding: 2rem 0;">
+                Ще немає записів тренувань.
+            </div>
+        {% endif %}
+        <div class="dash-footer" style="text-align: right;">
+            <a href="{% url 'schedule' %}" style="font-size: 0.85rem; text-decoration: none;">Історія занять →</a>
+        </div>
+    </div>
+
+    {% endif %}
+
+</div>
 {% endblock %}

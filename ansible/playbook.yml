@@ -1,0 +1,6 @@
+- name: Deploy Vertex App
+  hosts: webservers
+  become: true
+  
+  roles:
+    - vertex_app

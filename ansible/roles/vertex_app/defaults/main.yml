@@ -1,0 +1,8 @@
+repo_url: "https://github.com/xarexw/vertex_app"
+project_dir: "/opt/vertex-app"
+
+db_host: "db"
+db_port: "5432"
+
+postgres_db: "gym_db"
+postgres_user: "gym_user"
