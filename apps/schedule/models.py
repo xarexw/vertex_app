@@ -23,3 +23,15 @@ class Record(models.Model):
 
     def __str__(self):
         return f"{self.client.username} - {self.exercise_name}: {self.result_value}"
+
+class Exercise(models.Model):
+
+    title = models.CharField(max_length=200, unique=True, verbose_name="Назва вправи")
+    description = models.TextField(blank=True, verbose_name="Опис / Техніка")
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Вправа"
+        verbose_name_plural = "Довідник вправ"
