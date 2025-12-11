@@ -1,4 +1,4 @@
-repo_url: "https://github.com/TVIY_NICKNAME/vertex-app.git"
+repo_url: "https://github.com/xarexw/vertex_app"
 project_dir: "/opt/vertex-app"
 
 db_host: "db"
