@@ -1,3 +1,6 @@
+- name: Include encrypted secrets from vars/secrets.yml
+  ansible.builtin.include_vars:
+    file: secrets.yml
 
 - name: Ensure community.docker collection is installed
   ansible.builtin.command: ansible-galaxy collection install community.docker
@@ -38,11 +41,12 @@
     force: yes
 
 # .env з шаблону
+#власник може читати
 - name: Create .env file from template
   template:
     src: .env.j2
     dest: "{{ project_dir }}/.env"
-    mode: '0600' #власник може читати
+    mode: '0600'
 
 - name: Start Docker Compose
   community.docker.docker_compose_v2:
