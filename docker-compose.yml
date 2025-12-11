@@ -1,4 +1,22 @@
 services:
+
+#Веб
+  web:
+    build: .             # <--- Каже: "Шукай Dockerfile у цій же папці і збери образ"
+    container_name: vertex_web
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app           # <--- Магія: зміни коду на комп'ютері миттєво видно в контейнері
+    ports:
+      - "8000:8000"      # Прокидаємо порт назовні
+    env_file:
+      - .env             # Читаємо змінні
+    depends_on:
+      db:
+        condition: service_healthy # Чекаємо, поки база прокинеться
+      redis:
+        condition: service_started
+
 #БД
   db:
     image: postgres:15-alpine

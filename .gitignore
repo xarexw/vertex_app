@@ -37,3 +37,13 @@ Thumbs.db
 # Docker
 # якщо раптом дані в локал директорію, а не volume
 pg_data/
+
+#Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.pem
+
+# --- Ansible ---
+*.retry
+ansible/vertex-key.pem
