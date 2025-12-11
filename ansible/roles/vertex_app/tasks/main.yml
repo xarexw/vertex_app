@@ -1,4 +1,9 @@
----
+
+- name: Ensure community.docker collection is installed
+  ansible.builtin.command: ansible-galaxy collection install community.docker
+  run_once: true
+  delegate_to: localhost
+
 - name: Update apt cache
   apt:
     update_cache: yes
@@ -39,8 +44,7 @@
     mode: '0600' #власник може читати
 
 - name: Start Docker Compose
-  community.general.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: "{{ project_dir }}"
-    build: true
     state: present
-    restarted: true
+    wait: true
