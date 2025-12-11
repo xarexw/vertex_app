@@ -1,6 +1,6 @@
 repo_url: "https://github.com/xarexw/vertex_app"
 project_dir: "/opt/vertex-app"
-
+django_debug: "False"
 db_host: "db"
 db_port: "5432"
 
