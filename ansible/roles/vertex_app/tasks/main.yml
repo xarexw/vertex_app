@@ -3,6 +3,7 @@
   ansible.builtin.command: ansible-galaxy collection install community.docker
   run_once: true
   delegate_to: localhost
+  become: false
 
 - name: Update apt cache
   apt:
