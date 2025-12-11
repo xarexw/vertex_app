@@ -1,23 +1,21 @@
+# variables.tf
+
 variable "aws_region" {
-  description = "AWS region"
+  description = "aws region"
   type        = string
-  default     = "eu-north-1"
 }
 
 variable "project_name" {
-  description = "project title"
+  description = "project name"
   type        = string
-  default     = "vertex-app"
-}
-
-variable "instance_type" {
-  description = "servet type"
-  type        = string
-  default     = "t2.micro"
 }
 
 variable "instance_count" {
-  description = "amount of servers"
+  description = "number of ec2"
   type        = number
-  default     = 2
+}
+
+variable "instance_type" {
+  description = "ec2 type"
+  type        = string
 }
