@@ -85,20 +85,20 @@ services:
     depends_on:
       - prometheus
 
-  node_exporter:
-   image: prom/node-exporter
-   container_name: node_exporter
-  #дозволяє бачити метрики всієї системи
-   volumes:
-    - /proc:/host/proc:ro
-    - /sys:/host/sys:ro
-    - /:/rootfs:ro
-   command:
-    - '--path.procfs=/host/proc'
-    - '--path.sysfs=/host/sys'
-    - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($|/)'
-#повинен працювати як хост для збору
-   network_mode: host
+#   node_exporter:
+#    image: prom/node-exporter
+#    container_name: node_exporter
+#   #дозволяє бачити метрики всієї системи
+#    volumes:
+#     - /proc:/host/proc:ro
+#     - /sys:/host/sys:ro
+#     - /:/rootfs:ro
+#    command:
+#     - '--path.procfs=/host/proc'
+#     - '--path.sysfs=/host/sys'
+#     - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($|/)'
+# #повинен працювати як хост для збору
+#    network_mode: host
 
   datadog:
     image: datadog/agent:latest
