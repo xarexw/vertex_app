@@ -1,0 +1,8 @@
+groups:
+  - name: postgres_aggregations
+    interval: 30s
+    rules:
+      - record: pg_connections:count:total
+        expr: sum(pg_stat_activity_count) by (datname)
+      - record: pg_errors:rate5m
+        expr: rate(pg_exporter_scrapes_total{status="error"}[5m])
