@@ -1,5 +1,10 @@
 pipeline {
-    agent any 
+    agent {
+        docker { 
+            image 'jenkins-ci-agent' 
+            args '-v /var/run/docker.sock:/var/run/docker.sock' 
+        }
+    }
 
     environment {
         SONAR_SCANNER_HOME = tool 'SonarScanner' // Sonar Scanner встановлено у Jenkins
