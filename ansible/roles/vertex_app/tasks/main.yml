@@ -9,29 +9,53 @@
   become: false
 
 - name: Update apt cache
-  apt:
+  ansible.builtin.apt:
     update_cache: yes
     cache_valid_time: 3600
+  become: true
 
 - name: Install required system packages
-  apt:
+  ansible.builtin.apt:
     name:
       - git
       - docker.io
-      - docker-compose
     state: present
+  become: true
+
+- name: Install Docker Compose V2 (as a plugin)
+  ansible.builtin.get_url:
+    url: https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: 'a+x'
+  become: true
+
+- name: Create symlink to /usr/bin/docker (V2)
+  ansible.builtin.file:
+    src: /usr/local/bin/docker-compose
+    dest: /usr/bin/docker-compose
+    state: link
+    force: yes
+  become: true
 
 - name: Ensure Docker service is running
   service:
     name: docker
     state: started
     enabled: yes
+  become: true
 
 - name: Add ubuntu user to docker group
   user:
     name: ubuntu
     groups: docker
     append: yes
+    become: true
+    register: docker_group_change
+
+- name: Reboot server to apply Docker group changes
+  ansible.builtin.reboot:
+    reboot_timeout: 600
+  when: docker_group_change.changed
 
 - name: Clone/Update repository
   git:
