@@ -1,0 +1,14 @@
+#Роль, завантажена з Ansible Galaxy
+- name: nginx
+  src: geerlingguy.nginx
+  version: 6.0.0
+
+#Роль, завантажена безпосередньо з Git
+- name: custom_monitoring
+  src: https://github.com/your-org/ansible-monitoring-role.git
+  version: "1.2.5"
+  
+#Колекція, завантажена з Galaxy
+- name: community.general
+  type: collection
+  version: 8.4.0
