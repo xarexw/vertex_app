@@ -36,19 +36,6 @@
     enabled: yes
   become: true
 
-- name: Add ubuntu user to docker group
-  user:
-    name: ubuntu
-    groups: docker
-    append: yes
-  become: true
-  register: docker_group_change
-
-- name: Reboot server to apply Docker group changes
-  ansible.builtin.reboot:
-    reboot_timeout: 600
-  when: docker_group_change.changed
-
 - name: Clone/Update repository
   git:
     repo: "{{ repo_url }}"
@@ -69,3 +56,4 @@
     project_src: "{{ project_dir }}"
     state: present
     wait: true
+  become: true
