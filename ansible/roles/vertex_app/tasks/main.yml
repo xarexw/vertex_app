@@ -49,8 +49,8 @@
     name: ubuntu
     groups: docker
     append: yes
-    become: true
-    register: docker_group_change
+  become: true
+  register: docker_group_change
 
 - name: Reboot server to apply Docker group changes
   ansible.builtin.reboot:
