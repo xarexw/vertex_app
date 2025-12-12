@@ -22,19 +22,11 @@
     state: present
   become: true
 
-- name: Install Docker Compose V2 (as a plugin)
-  ansible.builtin.get_url:
-    url: https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-linux-x86_64
-    dest: /usr/local/bin/docker-compose
-    mode: 'a+x'
-  become: true
-
-- name: Create symlink to /usr/bin/docker (V2)
-  ansible.builtin.file:
-    src: /usr/local/bin/docker-compose
-    dest: /usr/bin/docker-compose
-    state: link
-    force: yes
+- name: Install Docker Compose V2 via official shell script
+  ansible.builtin.shell: |
+    curl -SL https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+    ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
   become: true
 
 - name: Ensure Docker service is running
