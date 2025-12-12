@@ -10,7 +10,9 @@ env/
 
 #environment Variables
 .env
-.env.*
+.env.[a-zA-Z0-9]*
+!.env.j2
+
 
 #django
 *.log
