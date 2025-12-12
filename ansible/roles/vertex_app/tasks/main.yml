@@ -51,9 +51,9 @@
     dest: "{{ project_dir }}/.env"
     mode: '0600'
 
-- name: Start Docker Compose
-  community.docker.docker_compose_v2:
-    project_src: "{{ project_dir }}"
-    state: present
-    wait: true
+- name: Start Docker Compose (Shell Fallback)
+  ansible.builtin.shell: |
+    /usr/local/bin/docker-compose -f docker-compose.yml up -d
+  args:
+    chdir: "{{ project_dir }}"
   become: true
