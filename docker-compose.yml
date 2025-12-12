@@ -11,6 +11,12 @@ services:
       - "8000:8000"      #порт назовні
     env_file:
       - .env             #змінні
+    environment:
+      DD_SERVICE: "vertex-django-app" 
+      #на Datadog Agent
+      DD_AGENT_HOST: "127.0.0.1" 
+      #APM
+      DD_TRACE_AGENT_PORT: "8126"
     depends_on:
       db:
         condition: service_healthy #поки база гуд
@@ -93,6 +99,29 @@ services:
   #     - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($|/)'
   #   #повинен працювати як хост для збору
   #   network_mode: host
+
+  datadog:
+    image: datadog/agent:latest
+    container_name: datadog_agent
+    environment:
+      DD_API_KEY: ${DD_API_KEY} 
+      DD_SITE: "us5.datadoghq.com"
+      #запущений у Docker
+      DD_APM_ENABLED: "true"
+      #збір метрик з Docker
+      DD_PROCESS_AGENT_ENABLED: "true" 
+      DD_DOGSTATSD_NON_LOCAL_TRAFFIC: "true"
+    volumes:
+      # сокет Docker
+      - /var/run/docker.sock:/var/run/docker.sock:ro 
+      # файловоdf системи хосту для сист метрик
+      - /proc/:/host/proc/:ro 
+      - /sys/:/host/sys/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    # Агент бачить трафік та мережу хосту
+    network_mode: host 
+    # пріоритету
+    restart: unless-stopped
 
 volumes:
   pg_data:
